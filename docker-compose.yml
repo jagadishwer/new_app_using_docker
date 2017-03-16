@@ -1,0 +1,28 @@
+version: '2'
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: new_docker_app1
+      MYSQL_USER: jb
+      MYSQL_PASSWORD: 786
+    ports:
+      - "3307:3306"
+  app:
+    build: .
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/new_app_using_docker
+    ports:
+      - "3001:3000"
+    depends_on:
+      - db
+    links:
+      - db
+    environment:
+     DB_NAME: new_docker_app1
+     DB_USER: root
+     DB_PASSWORD: root
+     DB_HOST: db
